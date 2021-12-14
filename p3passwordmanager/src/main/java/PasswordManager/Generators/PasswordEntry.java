@@ -160,4 +160,9 @@ public class PasswordEntry implements Serializable {
         entry.generatePassword();
         return entry;
     }
+
+    @Override
+    public String toString() {
+        return getPassword();
+    }
 }
