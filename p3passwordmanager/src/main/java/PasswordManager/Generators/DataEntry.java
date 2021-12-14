@@ -7,6 +7,12 @@ public class DataEntry implements Serializable {
     private String entryLogin;
     private PasswordEntry entryPassword;
 
+    public DataEntry(String name, String login, PasswordEntry password) {
+        this.entryName = name;
+        this.entryLogin = login;
+        this.entryPassword = password;
+    }
+
     public String getName() {
         return entryName;
     }
@@ -31,5 +37,14 @@ public class DataEntry implements Serializable {
 
     public void updatePassword(String newpass) {
         entryPassword.setPassword(newpass);
+    }
+
+    @Override
+    public String toString() {
+        return "DataEntry["
+            + "Name=" + getName()
+            + ",Login=" + getLogin()
+            + ",Password=" + "*".repeat(getPassword().getPassword().length())
+            + "]";
     }
 }

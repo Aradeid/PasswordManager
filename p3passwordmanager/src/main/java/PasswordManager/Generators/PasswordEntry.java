@@ -42,6 +42,7 @@ public class PasswordEntry implements Serializable {
 
     //for importing existing passwords that may not follow rules
     public PasswordEntry(String password) {
+        //TODO validate password quality on contructor
         this.password = password;
     }
 
@@ -50,6 +51,7 @@ public class PasswordEntry implements Serializable {
     }
 
     public void setPassword(String pass) {
+        //TODO validate password quality on set
         this.previousPassword = this.password;
         this.password = pass;
     }
@@ -157,10 +159,5 @@ public class PasswordEntry implements Serializable {
         PasswordEntry entry = new PasswordEntry();
         entry.generatePassword();
         return entry;
-    }
-
-    @Override
-    public String toString() {
-        return getPassword();
     }
 }
