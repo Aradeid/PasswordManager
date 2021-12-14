@@ -1,7 +1,10 @@
-package p3passwordmanager.Generators;
+package PasswordManager.Generators;
 
 import java.io.Serializable;
 import org.passay.CharacterData;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 
 public class PasswordEntry implements Serializable {
     private String password;
@@ -11,29 +14,39 @@ public class PasswordEntry implements Serializable {
     private boolean canUseLowerCase = true;
     private boolean canUseSpecialSymbols = true;
     private int minimumRequirementsPerSymbolType = 2;
+    private int maximumPasswordLength = 12;
+
+    public static String ERROR_CODE = "ERRONEOUS_SPECIAL_CHARS";
 
     public PasswordEntry() {}
 
     //Constructor used to generate new passwords
-    public PasswordEntry(boolean digitsRule, boolean upperCaseRule, boolean lowerCaseRule, boolean specialSymbolsRule, int minCount) {
+    public PasswordEntry(boolean digitsRule, boolean upperCaseRule, boolean lowerCaseRule, boolean specialSymbolsRule, int minCount, int maxLen) {
         this.canUseDigits = digitsRule;
         this.canUseUpperCase = upperCaseRule;
         this.canUseLowerCase = lowerCaseRule;
         this.canUseSpecialSymbols = specialSymbolsRule;
         this.minimumRequirementsPerSymbolType = minCount;
+        this.maximumPasswordLength = maxLen;
     }
     //Constructor used to build existing password objects from file or database
-    public PasswordEntry(boolean digitsRule, boolean upperCaseRule, boolean lowerCaseRule, boolean specialSymbolsRule, int minCount, String password) {
+    public PasswordEntry(boolean digitsRule, boolean upperCaseRule, boolean lowerCaseRule, boolean specialSymbolsRule, int minCount, int maxLen, String password) {
         this.canUseDigits = digitsRule;
         this.canUseUpperCase = upperCaseRule;
         this.canUseLowerCase = lowerCaseRule;
         this.canUseSpecialSymbols = specialSymbolsRule;
         this.minimumRequirementsPerSymbolType = minCount;
+        this.maximumPasswordLength = maxLen;
         this.password = password;
     }
 
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String pass) {
+        this.previousPassword = this.password;
+        this.password = pass;
     }
 
     public boolean getCanUseDigits() {
@@ -67,11 +80,22 @@ public class PasswordEntry implements Serializable {
     public int getMinimumRequirementsPerSymbolType() {
         return minimumRequirementsPerSymbolType;
     }
-    public void setMinimumRequirementsPerSymbolType(int count) {
+    public void setMinimumRequirementsPerSymbolType(int count) throws Exception {
         if (count <= 0) {
             this.minimumRequirementsPerSymbolType = count;
         } else {
             throw new Exception("Minimum requirement of symbol cannot be less than one");
+        }
+    }
+
+    public int getMaximumPasswordLength() {
+        return maximumPasswordLength;
+    }
+    public void setMaximumPasswordLength(int count) throws Exception {
+        if (count < 0) {
+            this.maximumPasswordLength = count;
+        } else {
+            throw new Exception("Maximum requirement for password length cannot be less than zero");
         }
     }
 
@@ -111,7 +135,8 @@ public class PasswordEntry implements Serializable {
             getCanUseSpecialSymbols() ? minimumRequirementsPerSymbolType : 0
         );
 
-        String password = gen.generatePassword(12, splCharRule, lowerCaseRule, 
+        //TODO test if combined length is greater than max length
+        String password = gen.generatePassword(maximumPasswordLength, splCharRule, lowerCaseRule, 
         upperCaseRule, digitRule);
 
         this.previousPassword = this.password;
@@ -120,8 +145,13 @@ public class PasswordEntry implements Serializable {
     }
 
     public boolean restorePassword() {
-        if (previousPassword) {
-            this.password = previousPassword;
+        if (this.previousPassword.isEmpty()) {
+            //existing password is saved, in case call was an accident
+            String temp;
+            temp = this.password;
+            this.password = this.previousPassword;
+            this.previousPassword = temp;
+
             return true;
         }
         return false;

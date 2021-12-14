@@ -15,7 +15,7 @@ public class DataEntry implements Serializable {
     }
 
     public String getLogin() {
-        return entryName;
+        return entryLogin;
     }
     public void setLogin(String login) {
         this.entryLogin = login;
@@ -23,5 +23,13 @@ public class DataEntry implements Serializable {
 
     public PasswordEntry getPassword() {
         return entryPassword;
+    }
+
+    public void updatePassword() {
+        entryPassword.generatePassword();
+    }
+
+    public void updatePassword(String newpass) {
+        entryPassword.setPassword(newpass);
     }
 }
