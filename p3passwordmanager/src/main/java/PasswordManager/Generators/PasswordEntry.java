@@ -6,6 +6,8 @@ import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
 
+import PasswordManager.Generators.PassayGenerators.SpecialCharacterData;
+
 public class PasswordEntry implements Serializable {
     private String password;
     private String previousPassword;
@@ -15,8 +17,6 @@ public class PasswordEntry implements Serializable {
     private boolean canUseSpecialSymbols = true;
     private int minimumRequirementsPerSymbolType = 2;
     private int maximumPasswordLength = 12;
-
-    public static String ERROR_CODE = "ERRONEOUS_SPECIAL_CHARS";
 
     public PasswordEntry() {}
 
@@ -37,6 +37,11 @@ public class PasswordEntry implements Serializable {
         this.canUseSpecialSymbols = specialSymbolsRule;
         this.minimumRequirementsPerSymbolType = minCount;
         this.maximumPasswordLength = maxLen;
+        this.password = password;
+    }
+
+    //for importing existing passwords that may not follow rules
+    public PasswordEntry(String password) {
         this.password = password;
     }
 
@@ -120,16 +125,7 @@ public class PasswordEntry implements Serializable {
             getCanUseDigits() ? minimumRequirementsPerSymbolType : 0
         );
 
-        CharacterData specialChars = new CharacterData() {
-            public String getErrorCode() {
-                return ERROR_CODE;
-            }
-
-            public String getCharacters() {
-                return "!@#$%^&*()_+";
-            }
-        };
-
+        CharacterData specialChars = new SpecialCharacterData();
         CharacterRule splCharRule = new CharacterRule(specialChars);
         splCharRule.setNumberOfCharacters(
             getCanUseSpecialSymbols() ? minimumRequirementsPerSymbolType : 0
@@ -155,5 +151,16 @@ public class PasswordEntry implements Serializable {
             return true;
         }
         return false;
+    }
+
+    public static PasswordEntry getNewEntry() {
+        PasswordEntry entry = new PasswordEntry();
+        entry.generatePassword();
+        return entry;
+    }
+
+    @Override
+    public String toString() {
+        return getPassword();
     }
 }
