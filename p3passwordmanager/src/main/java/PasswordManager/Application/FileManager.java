@@ -12,13 +12,13 @@ import java.util.List;
 
 import PasswordManager.Generators.DataEntry;
 
-public class FileManager {
-    final static String passLibraryPath = "passfileset.pmg";
-    final static String passLibraryBackupPath = "passfileset.pmg.bak";
+public class FileManager implements GenericDataManager {
+    final static String passLibraryPath = "passfileset.pmg"; //TODO move to settings
+    final static String passLibraryBackupPath = "passfileset.pmg.bak"; //TODO move to settings
 
     private static List<DataEntry> passLibrary;
 
-    public static void openLibrary() {
+    public void openLibrary() {
         try {
             FileInputStream fis = new FileInputStream(passLibraryPath);
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -35,7 +35,7 @@ public class FileManager {
         }
     }
 
-    public static void restoreBackup() {
+    public void restoreBackup() {
         try {
             //File passLibraryFile = new File(passLibraryPath);
             FileInputStream fis = new FileInputStream(passLibraryBackupPath);
@@ -44,13 +44,13 @@ public class FileManager {
             ois.close();
             fis.close();
 
-            saveLibrary(); //called in case original file was damaged or lost
+            updateLibrary(); //called in case original file was damaged or lost
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void createLibraryFile() {
+    private void createLibraryFile() {
         try {
             File passLibraryFile = new File(passLibraryPath);
             passLibraryFile.createNewFile();
@@ -68,7 +68,7 @@ public class FileManager {
         }
     }
 
-    private static void createLibraryBackupFile() {
+    private void createLibraryBackupFile() {
         try {
             File passLibraryBackupFile = new File(passLibraryBackupPath);
             passLibraryBackupFile.createNewFile();
@@ -78,7 +78,8 @@ public class FileManager {
         }
     }
 
-    public static void saveLibrary() {
+    @Override
+    public void updateLibrary() {
         try {
             FileOutputStream fos = new FileOutputStream(passLibraryPath);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -90,8 +91,9 @@ public class FileManager {
         }
     }
 
-    public static void closeLibrary() {
-        saveLibrary();
+    @Override
+    public void closeLibrary() {
+        updateLibrary();
 
         try {
             FileOutputStream fos = new FileOutputStream(passLibraryBackupPath);
@@ -104,7 +106,26 @@ public class FileManager {
         }
     }
 
-    public static List<DataEntry> getLibrary() {
+    public List<DataEntry> getLibrary() {
         return passLibrary;
+    }
+
+    @Override
+    public void addDataEntry(DataEntry entry) {
+        passLibrary.add(entry);
+        updateLibrary();
+    }
+
+    @Override
+    public void removeDataEntry(DataEntry entry) {
+        passLibrary.remove(entry);
+        updateLibrary();
+    }
+
+    @Override
+    public void updateDataEntry(DataEntry entry) {
+        //no way to recognize entry
+        //it is assumed that the 'entry' is already part of library
+        updateLibrary();
     }
 }
