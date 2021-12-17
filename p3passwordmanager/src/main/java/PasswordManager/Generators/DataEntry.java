@@ -8,6 +8,8 @@ public class DataEntry implements Serializable {
     private String entryLogin;
     private PasswordEntry entryPassword;
 
+    private static final long serialVersionUID = 84727283795663L;
+
     public DataEntry(String name, String login, String password) {
         this.entryName = name;
         this.entryLogin = login;
