@@ -7,8 +7,8 @@ public class Settings {
     public Settings() {
         //TODO load settings from file
 
-        windowHeight = 800;
-        windowWidth = 1000;
+        windowHeight = 400;
+        windowWidth = 600;
         databaseEnabled = false;
     }
 
