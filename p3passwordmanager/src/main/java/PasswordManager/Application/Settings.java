@@ -4,12 +4,16 @@ public class Settings {
     private int windowHeight;
     private int windowWidth;
     private boolean databaseEnabled;
+    private String libraryFilePath;
+    private String backupLibraryFilePath;
     public Settings() {
         //TODO load settings from file
 
         windowHeight = 400;
         windowWidth = 600;
         databaseEnabled = false;
+        libraryFilePath = "passfileset.pmg";
+        backupLibraryFilePath = "passfileset.pmg.bak";
     }
 
     private void updateSettingsFile() {
@@ -44,5 +48,21 @@ public class Settings {
         //TODO save to file
         databaseEnabled = value;
         updateSettingsFile();
+    }
+
+    public String getLibraryFilePath() {
+        return libraryFilePath;
+    }
+
+    public void setLibraryFilePath(String path) {
+        this.libraryFilePath = path;
+    }
+
+    public String getBackupLibraryFilePath() {
+        return backupLibraryFilePath;
+    }
+
+    public void setBackupLibraryFilePath(String path) {
+        this.backupLibraryFilePath = path;
     }
 }
