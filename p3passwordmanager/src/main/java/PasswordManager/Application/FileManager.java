@@ -18,6 +18,10 @@ public class FileManager implements GenericDataManager {
 
     private static List<DataEntry> passLibrary;
 
+    /**
+     * prepares file library for work
+     * opens correct file and returns values
+     */
     public void openLibrary() {
         try {
             FileInputStream fis = new FileInputStream(passLibraryPath);
@@ -35,6 +39,9 @@ public class FileManager implements GenericDataManager {
         }
     }
 
+    /**
+     * restores library from file backup
+     */
     public void restoreBackup() {
         try {
             //File passLibraryFile = new File(passLibraryPath);
@@ -50,6 +57,9 @@ public class FileManager implements GenericDataManager {
         }
     }
 
+    /**
+     * generates new library file
+     */
     private void createLibraryFile() {
         try {
             File passLibraryFile = new File(passLibraryPath);
@@ -78,6 +88,9 @@ public class FileManager implements GenericDataManager {
         }
     }
 
+    /**
+     * Writes whole library object to file 
+     */
     @Override
     public void updateLibrary() {
         try {
@@ -91,6 +104,9 @@ public class FileManager implements GenericDataManager {
         }
     }
 
+    /**
+     * Saves library object and creates a backup file
+     */
     @Override
     public void closeLibrary() {
         updateLibrary();
@@ -106,22 +122,42 @@ public class FileManager implements GenericDataManager {
         }
     }
 
+    /**
+     * Returns library collection from file manager
+     * 
+     * @return library object
+     */
     public List<DataEntry> getLibrary() {
         return passLibrary;
     }
 
+    /**
+     * Saves given object to the library, and then updates library file
+     * 
+     * @param entry value to be added
+     */
     @Override
     public void addDataEntry(DataEntry entry) {
         passLibrary.add(entry);
         updateLibrary();
     }
 
+    /**
+     * Removes given object from library, then updates library file
+     * 
+     * @param entry value to be removed
+     */
     @Override
     public void removeDataEntry(DataEntry entry) {
         passLibrary.remove(entry);
         updateLibrary();
     }
 
+    /**
+     * Updates a given data entry; as the entry is already part of the library, only the library file should be updated
+     * 
+     * @param entry object with new values
+     */
     @Override
     public void updateDataEntry(DataEntry entry) {
         //no way to recognize entry
