@@ -8,10 +8,6 @@ import PasswordManager.Generators.DataEntry;
 import PasswordManager.Generators.PasswordEntry;
 import PasswordManager.Interface.PrimaryWindow;
 
-/**
- * Hello world!
- *
- */
 public class App
 {
     public static void main( String[] args )
@@ -24,7 +20,7 @@ public class App
     }
 
     public static void passOutputVerification() {
-        DataEntry entry = new DataEntry("Zucc's wet dream", "mihailv", new PasswordEntry("internet"));
+        DataEntry entry = new DataEntry("Zucc's disgusting dream", "mihailv", new PasswordEntry("internet"));
         System.out.println(entry.getPassword().toString());
     }
 

@@ -1,39 +1,51 @@
 package PasswordManager.Generators;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Vector;
 
 public class DataEntry implements Serializable {
+    private int entryId; //part of the database to file conversion, still unsure on how to implement
     private String entryName;
     private String entryLogin;
+    private LocalDateTime timeAdded;
+    private LocalDateTime timeUpdated;
     private PasswordEntry entryPassword;
 
     private static final long serialVersionUID = 84727283795663L;
 
     /**
     * Basic contructor, generates a new entry from name, login, and password
+    * Used for creating date entries locally
     *    
     * @param  name to be used as identifier among passwords
     * @param  login saved as the login for the given entry
     * @param  password string to be saved for password
     */
     public DataEntry(String name, String login, String password) {
+        this.entryId = -1;
         this.entryName = name;
         this.entryLogin = login;
         this.entryPassword = new PasswordEntry(password);
+        this.timeAdded = LocalDateTime.now();
+        this.timeUpdated = timeAdded;
     }
 
     /**
-    * Basic contructor, generates a new entry from name, login, and password
+    * Full contructor, generates a new entry from id, name, login, and passwordEntry, addTime, updateTime
+    * Used to generate fully fledged entries from database
     *    
     * @param  name to be used as identifier among passwords
     * @param  login saved as the login for the given entry
     * @param  password PasswordEntry used a a complete password object
     */
-    public DataEntry(String name, String login, PasswordEntry password) {
+    public DataEntry(int id, String name, String login, PasswordEntry password, LocalDateTime addTime, LocalDateTime updDateTime) {
+        this.entryId = id;
         this.entryName = name;
         this.entryLogin = login;
         this.entryPassword = password;
+        this.timeAdded = addTime;
+        this.timeUpdated = updDateTime;
     }
 
     /**
@@ -52,6 +64,7 @@ public class DataEntry implements Serializable {
     */
     public void setName(String name) {
         this.entryName = name;
+        this.updateTimeUpdated();
     }
 
     /**
@@ -70,6 +83,7 @@ public class DataEntry implements Serializable {
     */
     public void setLogin(String login) {
         this.entryLogin = login;
+
     }
 
     public PasswordEntry getPassword() {
@@ -90,6 +104,7 @@ public class DataEntry implements Serializable {
     */
     public void updatePassword() {
         entryPassword.generatePassword();
+        updateTimeUpdated();
     }
 
     /**
@@ -99,6 +114,7 @@ public class DataEntry implements Serializable {
     */
     public void setPassword(String newpass) {
         entryPassword.setPassword(newpass);
+        updateTimeUpdated();
     }
 
     /**
@@ -107,8 +123,53 @@ public class DataEntry implements Serializable {
     * @return true if a previous password exists, and and was therefore successful, false if no previous password 
     */
     public boolean recoverPassword() {
+        updateTimeUpdated();
         return entryPassword.restorePassword();
     }
+
+    /**
+    * Returns entry creation datetime
+    *    
+    * @return time when entry was created
+    */
+    public LocalDateTime getTimeAdded() {
+        return timeAdded;
+    }
+
+    /**
+    * Sets entry creation datetime
+    *    
+    * @param time value to be set
+    */
+    public void setTimeAdded(LocalDateTime time) {
+        this.timeAdded = time;
+    }
+
+    /**
+    * Returns entry update datetime
+    *    
+    * @return time when entry was updated
+    */
+    public LocalDateTime getTimeUpdated() {
+        return timeUpdated;
+    }
+
+    /**
+    * Sets entry update datetime
+    *    
+    * @param time value to be set
+    */
+    public void setTimeUpdated(LocalDateTime time) {
+        this.timeUpdated = time;
+    }
+
+    /**
+    * Sets entry update time to current time
+    */
+    public void updateTimeUpdated() {
+        this.timeUpdated = LocalDateTime.now();
+    }
+       
 
     /**
     * Returns DataEntry as string
