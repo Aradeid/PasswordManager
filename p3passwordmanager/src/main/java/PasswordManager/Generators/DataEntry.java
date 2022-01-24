@@ -1,15 +1,15 @@
 package PasswordManager.Generators;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.Vector;
 
 public class DataEntry implements Serializable {
     private int entryId; //part of the database to file conversion, still unsure on how to implement
     private String entryName;
     private String entryLogin;
-    private LocalDateTime timeAdded;
-    private LocalDateTime timeUpdated;
+    private Timestamp timeAdded;
+    private Timestamp timeUpdated;
     private PasswordEntry entryPassword;
 
     private static final long serialVersionUID = 84727283795663L;
@@ -27,7 +27,7 @@ public class DataEntry implements Serializable {
         this.entryName = name;
         this.entryLogin = login;
         this.entryPassword = new PasswordEntry(password);
-        this.timeAdded = LocalDateTime.now();
+        this.timeAdded = new Timestamp(System.currentTimeMillis());
         this.timeUpdated = timeAdded;
     }
 
@@ -39,13 +39,31 @@ public class DataEntry implements Serializable {
     * @param  login saved as the login for the given entry
     * @param  password PasswordEntry used a a complete password object
     */
-    public DataEntry(int id, String name, String login, PasswordEntry password, LocalDateTime addTime, LocalDateTime updDateTime) {
+    public DataEntry(int id, String name, String login, PasswordEntry password, Timestamp addTime, Timestamp updDateTime) {
         this.entryId = id;
         this.entryName = name;
         this.entryLogin = login;
         this.entryPassword = password;
         this.timeAdded = addTime;
         this.timeUpdated = updDateTime;
+    }
+
+    /**
+    * Returns entry id. Used to keep track of its database value
+    *    
+    * @return id of this entry
+    */
+    public int getId() {
+        return entryId;
+    }
+
+    /**
+    * Sets entry id. Used to keep track of its database value
+    *    
+    * @param id of this entry
+    */
+    public void setId(int id) {
+        this.entryId = id;
     }
 
     /**
@@ -132,7 +150,7 @@ public class DataEntry implements Serializable {
     *    
     * @return time when entry was created
     */
-    public LocalDateTime getTimeAdded() {
+    public Timestamp getTimeAdded() {
         return timeAdded;
     }
 
@@ -141,7 +159,7 @@ public class DataEntry implements Serializable {
     *    
     * @param time value to be set
     */
-    public void setTimeAdded(LocalDateTime time) {
+    public void setTimeAdded(Timestamp time) {
         this.timeAdded = time;
     }
 
@@ -150,7 +168,7 @@ public class DataEntry implements Serializable {
     *    
     * @return time when entry was updated
     */
-    public LocalDateTime getTimeUpdated() {
+    public Timestamp getTimeUpdated() {
         return timeUpdated;
     }
 
@@ -159,7 +177,7 @@ public class DataEntry implements Serializable {
     *    
     * @param time value to be set
     */
-    public void setTimeUpdated(LocalDateTime time) {
+    public void setTimeUpdated(Timestamp time) {
         this.timeUpdated = time;
     }
 
@@ -167,7 +185,7 @@ public class DataEntry implements Serializable {
     * Sets entry update time to current time
     */
     public void updateTimeUpdated() {
-        this.timeUpdated = LocalDateTime.now();
+        this.timeUpdated = new Timestamp(System.currentTimeMillis());
     }
        
 

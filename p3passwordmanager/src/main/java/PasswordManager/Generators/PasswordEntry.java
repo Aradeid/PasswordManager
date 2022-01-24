@@ -9,6 +9,7 @@ import org.passay.PasswordGenerator;
 import PasswordManager.Generators.PassayGenerators.SpecialCharacterData;
 
 public class PasswordEntry implements Serializable {
+    private int entryId;
     private String password;
     private String previousPassword;
     private boolean canUseDigits = true;
@@ -52,7 +53,8 @@ public class PasswordEntry implements Serializable {
     * @param maxLen maximum number of characters in password
     * @param password vlaue of password
     */
-    public PasswordEntry(boolean digitsRule, boolean upperCaseRule, boolean lowerCaseRule, boolean specialSymbolsRule, int minCount, int maxLen, String password) {
+    public PasswordEntry(int id, boolean digitsRule, boolean upperCaseRule, boolean lowerCaseRule, boolean specialSymbolsRule, int minCount, int maxLen, String password) {
+        this.entryId = id;
         this.canUseDigits = digitsRule;
         this.canUseUpperCase = upperCaseRule;
         this.canUseLowerCase = lowerCaseRule;
@@ -72,6 +74,24 @@ public class PasswordEntry implements Serializable {
     public PasswordEntry(String password) {
         //TODO validate password quality on contructor
         this.password = password;
+    }
+
+    /**
+    * Returns entry id. Used to keep track of its database value
+    *    
+    * @return id of this entry
+    */
+    public int getId() {
+        return entryId;
+    }
+
+    /**
+    * Sets entry id. Used to keep track of its database value
+    *    
+    * @param id of this entry
+    */
+    public void setId(int id) {
+        this.entryId = id;
     }
 
     /**
@@ -271,7 +291,7 @@ public class PasswordEntry implements Serializable {
     }
 
     /**
-    * Returns a fully built PasswordEntry object with defauly settings
+    * Returns a fully built PasswordEntry object with default settings
     *    
     * @return PasswordEntry object with default properties
     */
