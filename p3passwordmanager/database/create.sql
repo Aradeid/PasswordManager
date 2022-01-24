@@ -25,6 +25,8 @@ CREATE TABLE IF NOT EXISTS pm_entry (
     passid INT,
     userid INT,
    	PRIMARY KEY(entryid),
-    FOREIGN KEY(passid) REFERENCES pm_password(passid),
+    FOREIGN KEY(passid) 
+        REFERENCES pm_password(passid)
+        ON DELETE CASCADE,
     FOREIGN KEY(userid) REFERENCES pm_user(userid)
 );
