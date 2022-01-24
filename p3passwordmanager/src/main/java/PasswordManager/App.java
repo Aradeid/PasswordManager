@@ -20,7 +20,7 @@ public class App
     }
 
     public static void passOutputVerification() {
-        DataEntry entry = new DataEntry("Zucc's disgusting dream", "mihailv", new PasswordEntry("internet"));
+        DataEntry entry = new DataEntry("Zucc's disgusting dream", "mihailv", "internet");
         System.out.println(entry.getPassword().toString());
     }
 
@@ -29,10 +29,9 @@ public class App
         dMgr.openLibrary();
         List<DataEntry> passLibrary = dMgr.getLibrary();
         //passLibrary.add(new DataEntry("Jojo fan wiki", "JosefJoestar", PasswordEntry.getNewEntry()));
-        //passLibrary.add(new DataEntry("Zucc's wet dream", "Aradeid", new PasswordEntry("internet")));
 
-        dMgr.addDataEntry(new DataEntry("Eternity OS", "Lambda", PasswordEntry.getNewEntry()));
-        dMgr.addDataEntry(new DataEntry("Google.com", "I am da CEO of guugl", PasswordEntry.getNewEntry()));
+        //dMgr.addDataEntry(new DataEntry("Eternity OS", "Lambda", PasswordEntry.getNewEntry()));
+        //dMgr.addDataEntry(new DataEntry("Google.com", "I am da CEO of guugl", PasswordEntry.getNewEntry()));
 
         dMgr.updateLibrary();
 
