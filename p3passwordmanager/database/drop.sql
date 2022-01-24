@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS pm_entry;
+DROP TABLE IF EXISTS pm_password;
+DROP TABLE IF EXISTS pm_user;
