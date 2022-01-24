@@ -13,8 +13,8 @@ import java.util.List;
 import PasswordManager.Generators.DataEntry;
 
 public class FileManager implements GenericDataManager {
-    final static String passLibraryPath = "passfileset.pmg"; //TODO move to settings
-    final static String passLibraryBackupPath = "passfileset.pmg.bak"; //TODO move to settings
+    final static String passLibraryPath = Settings.LibraryFilePath;
+    final static String passLibraryBackupPath = Settings.BackupLibraryFilePath;
 
     private static List<DataEntry> passLibrary;
 

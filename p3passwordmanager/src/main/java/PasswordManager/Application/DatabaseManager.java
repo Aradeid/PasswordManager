@@ -5,7 +5,7 @@ import java.util.List;
 import PasswordManager.Generators.DataEntry;
 
 public class DatabaseManager implements GenericDataManager {
-    private boolean databaseEnabled = false; //TODO read from settings
+    private boolean databaseEnabled = Settings.DatabaseEnabled;
 
     @Override
     public void openLibrary() {

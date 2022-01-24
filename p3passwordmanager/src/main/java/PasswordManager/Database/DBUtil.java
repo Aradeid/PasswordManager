@@ -7,6 +7,7 @@ import PasswordManager.Application.Settings;
 
 //Mostly based off of the example made during class
 public class DBUtil {
+    static String url = Settings.DatabaseUrl;
 	static String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	static String password = "";
 	static String user = Settings.DatabaseUser;
@@ -26,7 +27,6 @@ public class DBUtil {
 	}
 	
 	public static Connection getConnection() throws SQLException {
-		String url = Settings.DatabaseUrl;
 		return  DriverManager.getConnection(url, user, password);
 	}
 

@@ -29,14 +29,13 @@ public class PrimaryWindow extends JFrame {
     private int PRIMARY_WINDOW_HEIGHT;
     private DataManager dataManager;
     private List<DataEntry> passLibrary;
-    public static Settings settings = new Settings();
 
     DefaultTableModel paneTableModel;
 
     public PrimaryWindow() {
         super("Password Manager");
-        PRIMARY_WINDOW_WIDTH = settings.getWindowWidth();
-        PRIMARY_WINDOW_HEIGHT = settings.getWindowHeight();
+        PRIMARY_WINDOW_WIDTH = Settings.WindowWidth;
+        PRIMARY_WINDOW_HEIGHT = Settings.WindowHeight;
 
         dataManager = new DataManager();
         passLibrary = dataManager.getLibrary();
