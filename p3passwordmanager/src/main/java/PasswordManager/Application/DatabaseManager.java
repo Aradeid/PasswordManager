@@ -2,36 +2,35 @@ package PasswordManager.Application;
 
 import java.util.List;
 
+import PasswordManager.Database.Dao.DataEntryDao;
+import PasswordManager.Database.Dao.PasswordEntryDao;
 import PasswordManager.Generators.DataEntry;
 
 public class DatabaseManager implements GenericDataManager {
     private boolean databaseEnabled = Settings.DatabaseEnabled;
+    private DataEntryDao dataDao;
+    private PasswordEntryDao passDao;
+    private static List<DataEntry> passLibrary;
 
     @Override
     public void openLibrary() {
         if (!databaseEnabled) {
             return;
         }
-        // TODO Auto-generated method stub
-        
+        dataDao = new DataEntryDao();
+        passDao = new PasswordEntryDao();
+        passLibrary = dataDao.getAll();        
     }
+
 
     @Override
     public void updateLibrary() {
-        if (!databaseEnabled) {
-            return;
-        }
-        // TODO Auto-generated method stub
-        
+        //does nothing, as database is managed at entry level
     }
 
     @Override
     public void closeLibrary() {
-        if (!databaseEnabled) {
-            return;
-        }
-        // TODO Auto-generated method stub
-        
+        //does nothing, as database connection is closed on each transaction
     }
 
     @Override
@@ -39,8 +38,9 @@ public class DatabaseManager implements GenericDataManager {
         if (!databaseEnabled) {
             return;
         }
-        // TODO Auto-generated method stub
-        
+        if (dataDao != null) {
+            dataDao.add(entry);
+        }        
     }
 
     @Override
@@ -48,8 +48,9 @@ public class DatabaseManager implements GenericDataManager {
         if (!databaseEnabled) {
             return;
         }
-        // TODO Auto-generated method stub
-        
+        if (dataDao != null) {
+            dataDao.remove(entry);
+        }
     }
 
     @Override
@@ -57,17 +58,17 @@ public class DatabaseManager implements GenericDataManager {
         if (!databaseEnabled) {
             return;
         }
-        // TODO Auto-generated method stub
-        
+        if (dataDao != null) {
+            dataDao.update(entry);
+        }
     }
 
     @Override
     public List<DataEntry> getLibrary() {
-        if (!databaseEnabled) {// the illusion of choice
+        if (!databaseEnabled) {
             return null;
         }
-        // TODO Auto-generated method stub
-        return null;
+        return passLibrary;
     }
     
 }
