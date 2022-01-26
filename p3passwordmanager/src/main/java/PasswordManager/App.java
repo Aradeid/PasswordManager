@@ -6,6 +6,7 @@ import PasswordManager.Application.DataManager;
 import PasswordManager.Application.FileManager;
 import PasswordManager.Generators.DataEntry;
 import PasswordManager.Generators.PasswordEntry;
+import PasswordManager.Interface.LoginScreen;
 import PasswordManager.Interface.PrimaryWindow;
 
 public class App
@@ -14,7 +15,9 @@ public class App
     {
         //fileSystemTest();
         //passOutputVerification();
-        PrimaryWindow app = new PrimaryWindow();
+
+        //PrimaryWindow app = new PrimaryWindow();
+        LoginScreen app = new LoginScreen();
         app.setVisible(true);
         app.setLocationRelativeTo(null);
     }
@@ -30,8 +33,8 @@ public class App
         List<DataEntry> passLibrary = dMgr.getLibrary();
         //passLibrary.add(new DataEntry("Jojo fan wiki", "JosefJoestar", PasswordEntry.getNewEntry()));
 
-        //dMgr.addDataEntry(new DataEntry("Eternity OS", "Lambda", PasswordEntry.getNewEntry()));
-        //dMgr.addDataEntry(new DataEntry("Google.com", "I am da CEO of guugl", PasswordEntry.getNewEntry()));
+        dMgr.addDataEntry(new DataEntry("Eternity OS", "Lambda", PasswordEntry.getNewEntry()));
+        dMgr.addDataEntry(new DataEntry("Google.com", "I am da CEO of guugl", PasswordEntry.getNewEntry()));
 
         dMgr.updateLibrary();
 
