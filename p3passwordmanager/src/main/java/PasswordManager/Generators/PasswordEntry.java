@@ -19,6 +19,8 @@ public class PasswordEntry implements Serializable {
     private int minimumRequirementsPerSymbolType = 2;
     private int maximumPasswordLength = 12;
 
+    private static final long serialVersionUID = 59834532983045L;
+
     /**
     * Default contructor. Might become depricated
     */
