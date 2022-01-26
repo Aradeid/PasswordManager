@@ -11,7 +11,6 @@ import PasswordManager.Interface.Components.PMLabel;
 import PasswordManager.Interface.Components.PMPasswordField;
 import PasswordManager.Interface.Components.PMTextField;
 
-import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Container;

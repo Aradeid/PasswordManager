@@ -1,17 +1,13 @@
 package PasswordManager.Interface;
 
 import java.util.List;
-import java.util.Vector;
 
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import PasswordManager.Application.DataManager;
-import PasswordManager.Application.FileManager;
 import PasswordManager.Generators.DataEntry;
-import PasswordManager.Generators.PasswordEntry;
 
 public class PasswordListPane extends JScrollPane {
     private JTable paneTable;
