@@ -32,6 +32,23 @@ public class DataEntry implements Serializable {
     }
 
     /**
+    * Basic contructor, generates a new entry from name, login, and password
+    * Used for creating date entries locally
+    *    
+    * @param  name to be used as identifier among passwords
+    * @param  login saved as the login for the given entry
+    * @param  password safe value to be saved for password
+    */
+    public DataEntry(String name, String login, PasswordEntry password) {
+        this.entryId = -1;
+        this.entryName = name;
+        this.entryLogin = login;
+        this.entryPassword = password;
+        this.timeAdded = new Timestamp(System.currentTimeMillis());
+        this.timeUpdated = timeAdded;
+    }
+
+    /**
     * Full contructor, generates a new entry from id, name, login, and passwordEntry, addTime, updateTime
     * Used to generate fully fledged entries from database
     *    
@@ -200,6 +217,7 @@ public class DataEntry implements Serializable {
             + "Name=" + getName()
             + ",Login=" + getLogin()
             + ",Password=" + "*".repeat(getPasswordValue().length())
+            + ",Updated=" + getTimeUpdated()
             + "]";
     }
 
