@@ -56,7 +56,9 @@ public class DataEntryDao extends BaseDao<DataEntry> {
 			conn.commit();
 		} catch (SQLException e) {
 			DBUtil.dispaySQLExceptions(e);
-		}
+		} catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return result;
     }
     
@@ -88,7 +90,9 @@ public class DataEntryDao extends BaseDao<DataEntry> {
 			conn.commit();
 		} catch (SQLException e) {
 			DBUtil.dispaySQLExceptions(e);
-		}
+		} catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -114,7 +118,9 @@ public class DataEntryDao extends BaseDao<DataEntry> {
 			conn.commit();
 		} catch (SQLException e) {
 			DBUtil.dispaySQLExceptions(e);
-		}
+		} catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -158,7 +164,9 @@ public class DataEntryDao extends BaseDao<DataEntry> {
 			conn.commit();
 		} catch (SQLException e) {
 			DBUtil.dispaySQLExceptions(e);
-		}
+		} catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return output;
     }
 
@@ -203,7 +211,9 @@ public class DataEntryDao extends BaseDao<DataEntry> {
 			conn.commit();
 		} catch (SQLException e) {
 			DBUtil.dispaySQLExceptions(e);
-		}
+		} catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return output;
     }
     

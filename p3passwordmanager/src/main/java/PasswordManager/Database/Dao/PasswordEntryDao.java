@@ -52,7 +52,9 @@ public class PasswordEntryDao extends BaseDao<PasswordEntry> {
             return result;
 		} catch (SQLException e) {
 			DBUtil.dispaySQLExceptions(e);
-		}
+		} catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 
@@ -84,7 +86,9 @@ public class PasswordEntryDao extends BaseDao<PasswordEntry> {
 			conn.commit();
 		} catch (SQLException e) {
 			DBUtil.dispaySQLExceptions(e);
-		}
+		} catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -112,7 +116,9 @@ public class PasswordEntryDao extends BaseDao<PasswordEntry> {
 			conn.commit();
 		} catch (SQLException e) {
 			DBUtil.dispaySQLExceptions(e);
-		}
+		} catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -148,7 +154,9 @@ public class PasswordEntryDao extends BaseDao<PasswordEntry> {
 			conn.commit();
 		} catch (SQLException e) {
 			DBUtil.dispaySQLExceptions(e);
-		}
+		} catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return output;
     }
 
@@ -185,7 +193,9 @@ public class PasswordEntryDao extends BaseDao<PasswordEntry> {
 			conn.commit();
 		} catch (SQLException e) {
 			DBUtil.dispaySQLExceptions(e);
-		}
+		} catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return output;
     }
 }
