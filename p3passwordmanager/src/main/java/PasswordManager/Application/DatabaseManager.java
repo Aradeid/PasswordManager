@@ -1,5 +1,6 @@
 package PasswordManager.Application;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import PasswordManager.Database.Dao.DataEntryDao;
@@ -10,7 +11,7 @@ public class DatabaseManager implements GenericDataManager {
     private boolean databaseEnabled = Settings.DatabaseEnabled;
     private DataEntryDao dataDao;
     private PasswordEntryDao passDao;
-    private static List<DataEntry> passLibrary;
+    private List<DataEntry> passLibrary;
 
     @Override
     public void openLibrary() {
@@ -23,14 +24,23 @@ public class DatabaseManager implements GenericDataManager {
     }
 
 
+    /**
+     * Checks entries for local-only ones
+     */
     @Override
     public void updateLibrary() {
-        //does nothing, as database is managed at entry level
+        passLibrary.forEach(entry -> {
+            if (entry.getId() < 0) {
+                dataDao.add(entry);
+            }
+        });
     }
 
+    /**
+     * does nothing, as database connection is closed on each transaction
+     */
     @Override
     public void closeLibrary() {
-        //does nothing, as database connection is closed on each transaction
     }
 
     @Override
@@ -69,6 +79,23 @@ public class DatabaseManager implements GenericDataManager {
             return null;
         }
         return passLibrary;
+    }
+
+    public void setLibrary(List<DataEntry> library) {
+        passLibrary.forEach(entry -> {
+            if (entry.getId() < 0) {
+                dataDao.add(entry);
+            } else {
+                dataDao.update(entry);
+            }
+        });
+    } 
+
+    public Timestamp getMostRecentTimestamp() {
+        if (passLibrary == null) {
+            return new Timestamp(0);
+        }
+        return new Timestamp(passLibrary.stream().mapToLong(entry -> entry.getTimeUpdated().getTime()).max().orElse(0));
     }
     
 }

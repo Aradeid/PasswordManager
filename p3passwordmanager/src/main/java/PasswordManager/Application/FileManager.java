@@ -1,5 +1,6 @@
 package PasswordManager.Application;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class FileManager implements GenericDataManager {
     final static String passLibraryPath = Settings.LibraryFilePath;
     final static String passLibraryBackupPath = Settings.BackupLibraryFilePath;
 
-    private static List<DataEntry> passLibrary;
+    private List<DataEntry> passLibrary;
 
     /**
      * prepares file library for work
@@ -30,7 +32,7 @@ public class FileManager implements GenericDataManager {
             
             ois.close();
             fis.close();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | EOFException e) {
             createLibraryFile();
         } catch (ClassNotFoundException e) {
             restoreBackup();
@@ -132,6 +134,14 @@ public class FileManager implements GenericDataManager {
     }
 
     /**
+     * Sets file library to given collection. Used when file library is outdated, compared to db 
+     * @param library
+     */
+    public void setLibrary(List<DataEntry> library) {
+        passLibrary = library;
+    }
+
+    /**
      * Saves given object to the library, and then updates library file
      * 
      * @param entry value to be added
@@ -163,5 +173,12 @@ public class FileManager implements GenericDataManager {
         //no way to recognize entry
         //it is assumed that the 'entry' is already part of library
         updateLibrary();
+    }
+
+    public Timestamp getMostRecentTimestamp() {
+        if (passLibrary == null) {
+            return new Timestamp(0);
+        }
+        return new Timestamp(passLibrary.stream().mapToLong(entry -> entry.getTimeUpdated().getTime()).max().orElse(0));
     }
 }

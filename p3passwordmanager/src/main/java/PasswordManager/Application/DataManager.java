@@ -1,5 +1,6 @@
 package PasswordManager.Application;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import PasswordManager.Generators.DataEntry;
@@ -19,7 +20,7 @@ public class DataManager implements GenericDataManager {
     }
 
     /**
-     * updates values of filemanager and databasemanager
+     * updates values for filemanager and databasemanager
      */
     @Override
     public void updateLibrary() {
@@ -76,15 +77,22 @@ public class DataManager implements GenericDataManager {
      */
     @Override
     public List<DataEntry> getLibrary() {
-        List<DataEntry> dbLib = dbMgr.getLibrary();
-        //TODO resolve 2 libraries conflict
-
-        List<DataEntry> fLib = fMgr.getLibrary();
-        if (fLib == null) {
-            this.openLibrary();
-            fLib = fMgr.getLibrary();
+        Long dbTimestamp = dbMgr.getMostRecentTimestamp().getTime();
+        Long fTimestamp = fMgr.getMostRecentTimestamp().getTime();
+        List<DataEntry> library;
+        
+        if (dbTimestamp == 0 && fTimestamp == 0 && Settings.DatabaseEnabled) {
+            library = new ArrayList<DataEntry>();
+            dbMgr.setLibrary(library);
+            fMgr.setLibrary(library);
+        } else if (dbTimestamp > fTimestamp) {
+            library = dbMgr.getLibrary();
+            fMgr.setLibrary(library);
+        } else {
+            library = fMgr.getLibrary();
+            dbMgr.setLibrary(library);
         }
-        return fLib;
+        return library;
     }
     
 }
