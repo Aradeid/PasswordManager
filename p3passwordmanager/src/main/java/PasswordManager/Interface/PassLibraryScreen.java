@@ -168,21 +168,15 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         newPasswordField = new PMTextField();
         panel.add(newPasswordField);
 
-        PMButton submitButton = new PMButton("Submit");
-        PMButton cancelButton = new PMButton("Cancel");
         generatePasswordButton = new PMButton("Generate Password");
         generatePasswordButton.addActionListener(this);
 
         panel.add(generatePasswordButton);
-        //panel.add(submitButton);
-        //panel.add(cancelButton);
         int result = JOptionPane.showConfirmDialog(null, panel, "Test",
             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             dataManager.addDataEntry(new DataEntry(nameField.getText(), loginField.getText(), newPasswordField.getText()));
             reloadTableContents();
-        } else {
-            System.out.println("Cancelled");
         }
     }
     public OrderType getOrderType() {
