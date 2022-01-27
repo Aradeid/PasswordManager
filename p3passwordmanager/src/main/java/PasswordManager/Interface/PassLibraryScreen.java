@@ -2,7 +2,6 @@ package PasswordManager.Interface;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         dataManager.openLibrary();
         passLibrary = dataManager.getLibrary();
 
-        setLayout(new FlowLayout());
+        setLayout(new GridLayout(1, 2));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(Settings.WindowWidth, Settings.WindowHeight);
 
@@ -111,15 +110,28 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         });
         JScrollPane sPane = new JScrollPane(paneTable);
         paneTable.setSize((int)(Settings.WindowWidth*0.9), Settings.WindowHeight);
-
-        this.add(new PMLabel("Filter:"));
-        this.add(filterField);
-        this.add(updateListButton);
-        this.add(filterClearButton);
-        this.add(new PMLabel("Sort:"));
-        this.add(sortComboBox);
         this.add(sPane);
-        this.add(addButton);
+        
+        JPanel userPanel = new JPanel();
+        userPanel.setLayout(new GridLayout(0, 1));
+
+        JPanel filterPanel = new JPanel();
+        filterPanel.add(new PMLabel("Filter:"));
+        filterPanel.add(filterField);
+        userPanel.add(filterPanel);
+
+        JPanel controlPanel = new JPanel();
+        controlPanel.add(updateListButton);
+        controlPanel.add(filterClearButton);
+        userPanel.add(controlPanel);
+
+        JPanel sortPanel = new JPanel();
+        sortPanel.add(new PMLabel("Sort:"));
+        sortPanel.add(sortComboBox);
+        userPanel.add(sortPanel);
+
+        userPanel.add(addButton);
+        this.add(userPanel);
     }
     public void addActionEvent() {
         addButton.addActionListener(this);
@@ -184,7 +196,7 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
     }
     public void showAddDialog() {
         JDialog d = new JDialog(this, "Add New Entry");
-        JPanel panel = new JPanel(new GridLayout(0, 1));//TODO test with 2,1
+        JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new PMLabel("Entry name"));
         PMTextField nameField = new PMTextField();
         panel.add(nameField);
