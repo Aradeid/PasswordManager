@@ -25,6 +25,7 @@ import PasswordManager.Generators.DataEntry;
 import PasswordManager.Generators.PasswordEntry;
 import PasswordManager.Generators.Comparators.EntryAddedComparator;
 import PasswordManager.Generators.Comparators.EntryNameComparator;
+import PasswordManager.Generators.Comparators.EntryUpdatedComparator;
 import PasswordManager.Interface.Components.EntryTable;
 import PasswordManager.Interface.Components.PMButton;
 import PasswordManager.Interface.Components.PMLabel;
@@ -171,7 +172,7 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         if (type == OrderType.ByAdd) {
             passLibrary.sort(new EntryAddedComparator());
         } else if (type == OrderType.ByUpdate) {
-            passLibrary.sort(new EntryAddedComparator());
+            passLibrary.sort(new EntryUpdatedComparator());
         } else {
             passLibrary.sort(new EntryNameComparator());
         }
