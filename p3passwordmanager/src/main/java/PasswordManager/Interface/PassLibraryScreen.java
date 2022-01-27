@@ -73,6 +73,7 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
     PMButton copyLoginButton = new PMButton("Copy");
     PMButton copyPassButton = new PMButton("Copy");
     
+    
     /**
      * Default contructor. Sets up all needed data and builds the layout
      */
@@ -288,6 +289,16 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
                 visible = !visible;
             } 
         });
+        PMButton recoverPassButton = new PMButton("Recover Password");
+        recoverPassButton.addActionListener(new ActionListener() {
+            //recover previously saved password
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (entry.recoverPassword()) {
+                    passwordField.setText(entry.getPasswordValue());
+                }                
+            }
+        });
         
         JPanel namePanel = new JPanel();
         namePanel.add(nameLabel);
@@ -309,6 +320,7 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         JPanel controlPanel = new JPanel();
         controlPanel.add(showPassButton);
         controlPanel.add(generatePasswordButton);
+        //controlPanel.add(recoverPassButton);//TODO check why nothing happens; temporarily disabled
         panel.add(controlPanel);
 
         int result = JOptionPane.showOptionDialog(this, panel, "Edit entry for '" + entry.getName() + "'",
@@ -322,8 +334,17 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
             reloadTableContents();//reloads table to account for changes
             
         } else if (result == 2) { //if delete, delete
+            // JPanel deletePanel = new JPanel();//removing delete confirmation as 2 dialogues conflict
+            // deletePanel.add(new PMLabel("Are you sure you want to delete '" + entry.getName() + "'"));
+            // int deleteRes = JOptionPane.showConfirmDialog(this, deletePanel, "Delete entry for '" + entry.getName() + "'",
+            //     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            // if (deleteRes == JOptionPane.OK_OPTION) {//confirm deletion
+            //     dataManager.removeDataEntry(entry);
+            //     reloadTableContents();
+            // }
             dataManager.removeDataEntry(entry);
             reloadTableContents();
+
         }
         //option 1 is skipped since nothing happens
 
