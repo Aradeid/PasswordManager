@@ -13,6 +13,9 @@ public class DatabaseManager implements GenericDataManager {
     private PasswordEntryDao passDao;
     private List<DataEntry> passLibrary;
 
+    /**
+     * Prepares libraries for usage
+     */
     @Override
     public void openLibrary() {
         if (!databaseEnabled) {
@@ -91,6 +94,11 @@ public class DatabaseManager implements GenericDataManager {
         });
     } 
 
+    /**
+     * Returns the latest timestamp. Used to see which manager is most up to date
+     * 
+     * @return biggest timestamp, or 0 if none found
+     */
     public Timestamp getMostRecentTimestamp() {
         if (passLibrary == null) {
             return new Timestamp(0);

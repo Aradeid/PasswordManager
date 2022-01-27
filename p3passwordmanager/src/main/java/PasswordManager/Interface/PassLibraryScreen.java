@@ -72,6 +72,9 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
     PMButton copyLoginButton = new PMButton("Copy");
     PMButton copyPassButton = new PMButton("Copy");
     
+    /**
+     * Default contructor. Sets up all needed data and builds the layout
+     */
     public PassLibraryScreen() {
         dataManager = new DataManager();
         dataManager.openLibrary();
@@ -92,8 +95,12 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
             }
         });
     }
+
+    /**
+     * Builds all base components of interface
+     */
     public void addComponentsToContainer() {
-        tableModel = new EntryTable(dataManager, passLibrary);
+        tableModel = new EntryTable(passLibrary);
         JTable paneTable = new JTable(tableModel);
         paneTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             /**
@@ -133,6 +140,10 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         userPanel.add(addButton);
         this.add(userPanel);
     }
+
+    /**
+     * Hooks all interactable elements to the corresponding events
+     */
     public void addActionEvent() {
         addButton.addActionListener(this);
         filterClearButton.addActionListener(this);
@@ -142,9 +153,20 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         copyLoginButton.addActionListener(this);
         copyPassButton.addActionListener(this);
     }
+
+    /**
+     * Default table reloader. Finds and assigns the correct values on its own
+     */
     public void reloadTableContents() {
         reloadTableContents(filterField.getText(), getOrderType());
     }
+
+    /**
+     * Complete table reloader. Filters and sorts the content to show up in table
+     * 
+     * @param filterValue string to be searched in name and login
+     * @param type enum that defines the sort euristic 
+     */
     public void reloadTableContents(String filterValue, OrderType type) {
         if (type == OrderType.ByAdd) {
             passLibrary.sort(new EntryAddedComparator());
@@ -166,54 +188,77 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         }
         setTableValues(passLibrary);
     }
+
+    /**
+     * Delegates the table to render itself with given values
+     * 
+     * @param values to fill table content
+     */
     public void setTableValues(List<DataEntry> values) {
         tableModel.setLibrary(values);
         tableModel.fireTableDataChanged();
     }
+
+    /**
+     * Collection of all event listeners
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
+        //add a new entry
         if (e.getSource() == addButton) {
             showAddDialog();
         }
+        //builds secure password for password field
         if (e.getSource() == generatePasswordButton) {
             passwordField.setText(PasswordEntry.getNewEntry().getPassword());
         }
+        //empties the filter field
         if (e.getSource() == filterClearButton) {
             filterField.setText("");
             reloadTableContents("", getOrderType());
         }
+        //reacts to filter or sort changes
         if (e.getSource() == updateListButton || e.getSource() == sortComboBox) {
             reloadTableContents();
         }
+        //copies login contents to clipboard
         if (e.getSource() == copyLoginButton) {
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(new StringSelection(loginField.getText()), null);
+            addToClipboard(loginField.getText());
         }
+        //copies password field contents to clipboard
         if (e.getSource() == copyPassButton) {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(new StringSelection(new String (passwordField.getPassword())), null);
         }
     }
+
+    /**
+     * Generates a dialog for introducing new pass entries
+     */
     public void showAddDialog() {
-        JDialog d = new JDialog(this, "Add New Entry");
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new PMLabel("Entry name"));
         PMTextField nameField = new PMTextField();
         panel.add(nameField);
         panel.add(new PMLabel("Login"));
-        loginField.setText("");
         panel.add(loginField);
         panel.add(new PMLabel("Password"));
         panel.add(passwordField);
 
         panel.add(generatePasswordButton);
-        int result = JOptionPane.showConfirmDialog(this, panel, "Test",
+        int result = JOptionPane.showConfirmDialog(this, panel, "Add new entry",
             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             dataManager.addDataEntry(new DataEntry(nameField.getText(), loginField.getText(), new String(passwordField.getPassword())));
-            reloadTableContents();
+            reloadTableContents();//reloads table to show new entry
         }
     }
+
+    /**
+     * Generates a dialog for editing and deleting entries
+     * 
+     * @param entry to be edited/deleted
+     */
     public void showEntryEditDialog(DataEntry entry) {
         Object[] options = { "Done", "Cancel", "Delete" };
         JPanel panel = new JPanel(new GridLayout(0, 1));
@@ -227,13 +272,19 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         PMButton showPassButton = new PMButton("Show");
         showPassButton.addActionListener(new ActionListener() {
             boolean visible = false;
+            /**
+             * Toggles passwordField between asterisks and normal text
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (visible) {
-                    passwordField.setEchoChar((char) 0);
-                } else {
                     passwordField.setEchoChar('*');
+                    showPassButton.setText("Show");
+                } else {
+                    passwordField.setEchoChar((char) 0);
+                    showPassButton.setText("Hide");
                 }
+                visible = !visible;
             } 
         });
         
@@ -259,22 +310,43 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         controlPanel.add(generatePasswordButton);
         panel.add(controlPanel);
 
-        int result = JOptionPane.showOptionDialog(this, panel, "Test",
+        int result = JOptionPane.showOptionDialog(this, panel, "Edit entry for '" + entry.getName() + "'",
             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-        if (result == JOptionPane.OK_OPTION) {
+        if (result == JOptionPane.OK_OPTION) { //if ok, inset updates
             entry.setName(nameField.getText());
             entry.setLogin(loginField.getText());
             entry.setPassword(new String(passwordField.getPassword()));
             entry.updateTimeUpdated();
             dataManager.updateDataEntry(entry);
-            reloadTableContents();
+            reloadTableContents();//reloads table to account for changes
             
-        } else if (result == 2) {
+        } else if (result == 2) { //if delete, delete
             dataManager.removeDataEntry(entry);
             reloadTableContents();
         }
+        //option 1 is skipped since nothing happens
+
+        //cleanup changes for reused fields
+        passwordField.setEchoChar('*');
+        passwordField.setText("");
+        loginField.setText("");
     }
+    /**
+     * Gives enum value for order combobox
+     * 
+     * @return enum value for sorting
+     */
     public OrderType getOrderType() {
         return ((SortOption)sortComboBox.getSelectedItem()).getType();
+    }
+    
+    /**
+     * Adds a given text to clipboard
+     * Copied from https://stackoverflow.com/questions/6710350/copying-text-to-the-clipboard-using-java
+     * @param val value to be added to clipboard
+     */
+    public void addToClipboard(String val) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(new StringSelection(val), null);
     }
 }

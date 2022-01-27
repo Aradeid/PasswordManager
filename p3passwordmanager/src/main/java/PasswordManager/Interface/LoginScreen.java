@@ -27,6 +27,9 @@ public class LoginScreen extends JFrame implements ActionListener {
     PMButton registerButton = new PMButton("Register");
     JCheckBox showPasswordBox = new JCheckBox("Show Password");
 
+    /**
+     * Default constructor, sets up all sizes, visibility, and listeners
+     */
     public LoginScreen() {
         this.setTitle("Please Login");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -37,6 +40,10 @@ public class LoginScreen extends JFrame implements ActionListener {
         addComponentsToContainer();
         addActionEvent();
     }
+
+    /**
+     * Generates the ui
+     */
     public void addComponentsToContainer() {
         JPanel mainPanel = new JPanel();
         mainPanel.setSize((int)(Settings.WindowWidth*0.6), (int)(Settings.WindowHeight*0.8));
@@ -54,31 +61,38 @@ public class LoginScreen extends JFrame implements ActionListener {
         mainPanel.add(registerButton);
         container.add(mainPanel);
     }
+
+    /**
+     * Connects buttons to listeners
+     */
     public void addActionEvent() {
-        //adding Action listener to components
         loginButton.addActionListener(this);
         registerButton.addActionListener(this);
         showPasswordBox.addActionListener(this);
     }
+
+    /**
+     * Implements button click functions
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == loginButton) {
+        if (e.getSource() == loginButton) {//attempt login
             String userText;
             String pwdText;
             userText = userTextField.getText();
             pwdText = new String(passwordField.getPassword());
+            //sadly only a fixed user and 0 security
             if (userText.equalsIgnoreCase(Settings.UserLogin) && pwdText.equals(Settings.UserPass)) {
                 //JOptionPane.showMessageDialog(this, "Login Successful");
-                
                 this.replaceWithFrame(new PassLibraryScreen());
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid Username or Password. Sorry but no multi-user system is supported: Login=TastyTesty, Pass=TastyPass");
             }
         }
-        if (e.getSource() == registerButton) {
+        if (e.getSource() == registerButton) {//attempt register
             this.replaceWithFrame(new RegistrationScreen());
         }
-        if (e.getSource() == showPasswordBox) {
+        if (e.getSource() == showPasswordBox) {//toggles password visibility
             if (showPasswordBox.isSelected()) {
                 passwordField.setEchoChar((char) 0);
             } else {
@@ -86,6 +100,13 @@ public class LoginScreen extends JFrame implements ActionListener {
             }
         }
     }
+
+    /**
+     * Best way I could find to replace an active frame. Removes current one and generates the next one
+     * Coordinates are taken from existing frame so it doesn't jump around
+     * 
+     * @param frame the replacing frame
+     */
     public void replaceWithFrame(JFrame frame) {
         this.dispose();
         int posX = this.getX();

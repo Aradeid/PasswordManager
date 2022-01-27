@@ -10,6 +10,9 @@ public class SpecialCharacterData implements CharacterData {
         return ERROR_CODE;
     }
 
+    /**
+     * Set of charas used in generation
+     */
     public String getCharacters() {
         return "!@#$%^&*()_+";
     }

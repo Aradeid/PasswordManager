@@ -314,7 +314,7 @@ public class PasswordEntry implements Serializable {
     }
 
     /**
-     * Returns a string of asterisks, with same length as password value
+     * Returns a string of asterisks, with same length as password value. Used to hide data when displayed in table, and nothing else
      * 
      * @return a series of asterisks
      */

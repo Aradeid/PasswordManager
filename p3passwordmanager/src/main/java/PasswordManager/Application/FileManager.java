@@ -80,6 +80,9 @@ public class FileManager implements GenericDataManager {
         }
     }
 
+    /**
+     * generates a new backup manager file
+     */
     private void createLibraryBackupFile() {
         try {
             File passLibraryBackupFile = new File(passLibraryBackupPath);
@@ -175,6 +178,11 @@ public class FileManager implements GenericDataManager {
         updateLibrary();
     }
 
+    /**
+     * Finds the largest timestamp in files. Used to compare manager recency
+     *  
+     * @return bigges timestamp, or 0 if none found
+     */
     public Timestamp getMostRecentTimestamp() {
         if (passLibrary == null) {
             return new Timestamp(0);

@@ -1,6 +1,5 @@
 package PasswordManager.Interface;
 
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,6 +26,9 @@ public class RegistrationScreen extends JFrame implements ActionListener {
     PMPasswordField repeatPasswordField = new PMPasswordField();
     PMButton registerButton = new PMButton("Register");
 
+    /**
+     * Default constructor, builds all necessary UI elements
+     */
     public RegistrationScreen() {
         this.setTitle("Please Login");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -36,6 +38,10 @@ public class RegistrationScreen extends JFrame implements ActionListener {
         addComponentsToContainer();
         addActionEvent();
     }
+
+    /**
+     * Generates and binds all components
+     */
     public void addComponentsToContainer() {
         JPanel mainPanel = new JPanel();
         mainPanel.setSize((int)(Settings.WindowWidth*0.6), (int)(Settings.WindowHeight*0.8));
@@ -48,12 +54,24 @@ public class RegistrationScreen extends JFrame implements ActionListener {
         passDataPanel.add(passwordLabel);
         passDataPanel.add(passwordField);
         mainPanel.add(passDataPanel);
+        JPanel repeatPassDataPanel = new JPanel();
+        repeatPassDataPanel.add(repeatPasswordLabel);
+        repeatPassDataPanel.add(repeatPasswordField);
+        mainPanel.add(repeatPassDataPanel);
         mainPanel.add(registerButton);
         container.add(mainPanel);
     }
+
+    /**
+     * Connects all 1 buttons
+     */
     public void addActionEvent() {
         registerButton.addActionListener(this);
     }
+
+    /**
+     * builds all 1 button functions
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == registerButton) {
@@ -61,7 +79,6 @@ public class RegistrationScreen extends JFrame implements ActionListener {
             String pwdText = new String(passwordField.getPassword());
             String rpwdText = new String(repeatPasswordField.getPassword());
             if (pwdText.equals(rpwdText)) {
-                //JOptionPane.showMessageDialog(this, "Login Successful");
                 this.replaceWithFrame(new PassLibraryScreen());
             } else {
                 JOptionPane.showMessageDialog(this, "Password and repeating password must be identical");
