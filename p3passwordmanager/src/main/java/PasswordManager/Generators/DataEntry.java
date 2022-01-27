@@ -227,10 +227,11 @@ public class DataEntry implements Serializable {
     * @return Vector of Strings with all key names for class
     */
     public static Vector<String> getKeys() {
-        Vector<String> returnArray = new Vector<>(3);
+        Vector<String> returnArray = new Vector<>(4);
         returnArray.add("Name");
         returnArray.add("Login");
         returnArray.add("Password");
+        returnArray.add("Last Updated");
         return returnArray;
     }
 
@@ -240,10 +241,11 @@ public class DataEntry implements Serializable {
     * @return Vector of Strings values for each field in object
     */
     public Vector<String> toArray() {
-        Vector<String> returnArray = new Vector<>(3);
+        Vector<String> returnArray = new Vector<>(4);
         returnArray.add(getName());
         returnArray.add(getLogin());
         returnArray.add(getPasswordValue());
+        returnArray.add(getTimeUpdated().toString());
         return returnArray;
     }
 }

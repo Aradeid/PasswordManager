@@ -312,4 +312,13 @@ public class PasswordEntry implements Serializable {
     public String toString() {
         return getPassword();
     }
+
+    /**
+     * Returns a string of asterisks, with same length as password value
+     * 
+     * @return a series of asterisks
+     */
+    public String getCensored() {
+        return "*".repeat(getPassword().length());
+    }
 }

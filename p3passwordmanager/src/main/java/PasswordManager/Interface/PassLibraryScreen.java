@@ -11,10 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableModel;
 
 import PasswordManager.Application.DataManager;
 import PasswordManager.Application.Settings;
@@ -22,6 +20,7 @@ import PasswordManager.Generators.DataEntry;
 import PasswordManager.Generators.PasswordEntry;
 import PasswordManager.Generators.Comparators.EntryAddedComparator;
 import PasswordManager.Generators.Comparators.EntryNameComparator;
+import PasswordManager.Interface.Components.EntryTable;
 import PasswordManager.Interface.Components.PMButton;
 import PasswordManager.Interface.Components.PMLabel;
 import PasswordManager.Interface.Components.PMTextField;
@@ -55,7 +54,8 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         new SortOption(OrderType.ByName, "By Name")
     };
 
-    DefaultTableModel paneTableModel = new DefaultTableModel();
+    //DefaultTableModel paneTableModel = new DefaultTableModel();
+    EntryTable tableModel;
     PMButton addButton = new PMButton("Add password");
     PMButton filterClearButton = new PMButton("Clear");
     PMTextField filterField = new PMTextField();
@@ -73,18 +73,10 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(Settings.WindowWidth, Settings.WindowHeight);
 
-        DataEntry.getKeys().forEach(key ->
-            paneTableModel.addColumn(key)
-        );
-
         addComponentsToContainer();
         addActionEvent();
-        
-        // passLibrary.forEach(entry ->
-        //    paneTableModel.addRow(entry.toArray())
-        // );
-        
 
+        //backs up labriray on close
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -93,9 +85,10 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         });
     }
     public void addComponentsToContainer() {
-        reloadTableContents();
-        JTable paneTable = new JTable(paneTableModel);
-        paneTable.setSize((int)(Settings.WindowWidth*0.7), Settings.WindowHeight);
+        tableModel = new EntryTable(dataManager, passLibrary);
+        JTable paneTable = new JTable(tableModel);
+        JScrollPane sPane = new JScrollPane(paneTable);
+        paneTable.setSize((int)(Settings.WindowWidth*0.9), Settings.WindowHeight);
 
         this.add(new PMLabel("Filter:"));
         this.add(filterField);
@@ -103,7 +96,7 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
         this.add(filterClearButton);
         this.add(new PMLabel("Sort:"));
         this.add(sortComboBox);
-        this.add(paneTable);
+        this.add(sPane);
         this.add(addButton);
     }
     public void addActionEvent() {
@@ -124,22 +117,24 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
             passLibrary.sort(new EntryNameComparator());
         }
         if (filterValue.length() > 0) {
-            List<DataEntry> values = passLibrary.stream().filter(entry -> entry.getName().contains(filterValue) || entry.getLogin().contains(filterValue)).toList();
-            values.forEach(v -> System.out.println(v));
+            List<DataEntry> values = 
+                passLibrary
+                    .stream()
+                    .filter(entry -> 
+                        entry.getName().toLowerCase().contains(filterValue.toLowerCase()) 
+                        || entry.getLogin().toLowerCase().contains(filterValue.toLowerCase()))
+                    .toList();
             setTableValues(values);
             return;
         }
         setTableValues(passLibrary);
     }
     public void setTableValues(List<DataEntry> values) {
-        paneTableModel.setRowCount(0);
-        for(DataEntry de : values) {
-            paneTableModel.addRow(de.toArray());
-        }
+        tableModel.setLibrary(values);
+        tableModel.fireTableDataChanged();
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("a click did happen at least");
         if (e.getSource() == addButton) {
             showAddDialog();
         }
@@ -151,7 +146,6 @@ public class PassLibraryScreen extends JFrame implements ActionListener {
             reloadTableContents("", getOrderType());
         }
         if (e.getSource() == updateListButton || e.getSource() == sortComboBox) {
-            System.out.println("Clicked");
             reloadTableContents(filterField.getText(), getOrderType());
         }
     }
